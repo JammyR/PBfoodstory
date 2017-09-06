@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jammy.pbfoodstory.moment.MomentActivity">
+    tools:context="com.example.jammy.pbfoodstory.moment.MomentActivity"
+    android:background="@color/background"
+    >
+    
+    <LinearLayout
+        android:background="@color/backgroundWhite"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp"
+        >
 
-</android.support.constraint.ConstraintLayout>
+        <EditText
+            android:id="@+id/et_moment"
+            android:cursorVisible="false"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/backgroundWhite"
+            android:gravity="top"
+            android:hint="这一刻你的想法..."
+            android:inputType="textMultiLine"
+            android:textColorHint="@color/hintcolor" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
