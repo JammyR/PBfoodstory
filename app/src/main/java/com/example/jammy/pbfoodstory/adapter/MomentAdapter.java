@@ -22,7 +22,8 @@ public class MomentAdapter extends BaseQuickAdapter<String,BaseViewHolder>{
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
-        Glide.with(mContext).load(item).into((ImageView) helper.getView(R.id.iv));
+//        Glide.with(mContext).load(item).centerCrop().into((ImageView) helper.getView(R.id.iv));
+        Glide.with(mContext).load(R.mipmap.moment_add).centerCrop().into((ImageView) helper.getView(R.id.iv));
     }
 
 

@@ -26,6 +26,7 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.example.jammy.pbfoodstory.R;
 import com.example.jammy.pbfoodstory.moment.MomentActivity;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo:跳转至添加Activity
-                startActivity(new Intent(MainActivity.this, MomentActivity.class));
+                Intent intent = new Intent(MainActivity.this, MomentActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * 初始化地点
-     * TODO:定位還有問題
+     * TODO:定位模式還有問題
      */
     public void initMyLocation(){
         MyLocationStyle myLocationStyle;
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity
         uiSettings = aMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(false);//消除缩放按钮
         uiSettings.setMyLocationButtonEnabled(true);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.zoomTo(17);//3-19   数字越大，地图放大倍数越大
+        CameraUpdate cameraUpdate = CameraUpdateFactory.zoomTo(18);//3-19   数字越大，地图放大倍数越大
         aMap.moveCamera(cameraUpdate);
     }
 }
