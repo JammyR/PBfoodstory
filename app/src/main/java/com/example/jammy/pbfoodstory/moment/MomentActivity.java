@@ -11,13 +11,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.jammy.pbfoodstory.R;
 import com.example.jammy.pbfoodstory.adapter.MomentAdapter;
+import com.example.jammy.pbfoodstory.photo.PhotoActivity;
 import com.example.jammy.pbfoodstory.utils.SpaceItemDecoration;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -30,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MomentActivity extends AppCompatActivity implements PoiSearch.OnPoiSearchListener{
+public class MomentActivity extends AppCompatActivity{
 
     PoiSearch poiSearch;
 
@@ -38,7 +36,7 @@ public class MomentActivity extends AppCompatActivity implements PoiSearch.OnPoi
     EditText etMoment;
     @BindView(R.id.rv)
     RecyclerView rv;
-    List picList;
+    List<String> picList;
     MomentAdapter adapter;
     public static int REQUEST_CODE_CHOOSE = 1;
     @BindView(R.id.tv_address)
@@ -56,7 +54,7 @@ public class MomentActivity extends AppCompatActivity implements PoiSearch.OnPoi
         picList = new ArrayList();
         adapter = new MomentAdapter(R.layout.item_moment, picList);
         //// TODO: 2017/9/6 初始化加号要改，想辦法把mipmap的文件添加進去到第一個
-        picList.add("");
+        picList.add("https://raw.githubusercontent.com/Datartvinci/BuyMeSth/master/base/src/main/res/drawable/ic_add.png");
         rv.setLayoutManager(new GridLayoutManager(this, 3));
         rv.addItemDecoration(new SpaceItemDecoration(20));
         rv.setAdapter(adapter);
@@ -71,6 +69,12 @@ public class MomentActivity extends AppCompatActivity implements PoiSearch.OnPoi
                             .maxSelectable(9)
                             .imageEngine(new GlideEngine())
                             .forResult(REQUEST_CODE_CHOOSE);// 设置作为标记的请求码
+                }
+                else{
+                    //todo:打开已选图片浏览
+                    Intent intent = new Intent(MomentActivity.this, PhotoActivity.class);
+                    intent.putStringArrayListExtra("list", (ArrayList<String>) picList);
+                    startActivity(intent);
                 }
             }
         });
@@ -92,19 +96,5 @@ public class MomentActivity extends AppCompatActivity implements PoiSearch.OnPoi
         /**
          * todo:點擊進行地址選擇
          */
-        poiSearch = new PoiSearch(this,null);
-        poiSearch.setBound(new PoiSearch.SearchBound(new LatLonPoint(location.getLatitude(),
-                location.getLongitude()), 1000));
-        poiSearch.setOnPoiSearchListener(this);
-    }
-
-    @Override
-    public void onPoiSearched(PoiResult poiResult, int i) {
-
-    }
-
-    @Override
-    public void onPoiItemSearched(PoiItem poiItem, int i) {
-
     }
 }

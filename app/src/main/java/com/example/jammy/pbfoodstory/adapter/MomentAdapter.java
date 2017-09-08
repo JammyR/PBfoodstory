@@ -1,6 +1,5 @@
 package com.example.jammy.pbfoodstory.adapter;
 
-import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -22,8 +21,7 @@ public class MomentAdapter extends BaseQuickAdapter<String,BaseViewHolder>{
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
-//        Glide.with(mContext).load(item).centerCrop().into((ImageView) helper.getView(R.id.iv));
-        Glide.with(mContext).load(R.mipmap.moment_add).centerCrop().into((ImageView) helper.getView(R.id.iv));
+        Glide.with(mContext).load(item).centerCrop().into((ImageView) helper.getView(R.id.iv));
     }
 
 
