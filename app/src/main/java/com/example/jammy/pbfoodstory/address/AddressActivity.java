@@ -2,6 +2,7 @@ package com.example.jammy.pbfoodstory.address;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,14 +38,19 @@ public class AddressActivity extends AppCompatActivity implements PoiSearch.OnPo
     RecyclerView rv;
 
     AddressAdapter adapter;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
         ButterKnife.bind(this);
-        list = new ArrayList<>();
 
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("地址选择");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        list = new ArrayList<>();
         adapter = new AddressAdapter(list);
         rv.setLayoutManager(new LinearLayoutManager(this));
         ////todo:这里添加rv的分割线
@@ -103,5 +109,11 @@ public class AddressActivity extends AppCompatActivity implements PoiSearch.OnPo
         poiSearch.setBound(new PoiSearch.SearchBound(lp, 1000));
         // 设置搜索区域为以lp点为圆心，其周围1000米范围
         poiSearch.searchPOIAsyn();// 异步搜索
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 }

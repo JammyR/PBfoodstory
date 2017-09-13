@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -17,6 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    useLibrary 'org.apache.http.legacy'
+
 }
 
 dependencies {
@@ -39,4 +43,5 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.1.3'
     testCompile 'junit:junit:4.12'
     compile 'com.google.code.gson:gson:2.8.1'
+    compile 'cn.bmob.android:bmob-sdk:3.5.5'
 }

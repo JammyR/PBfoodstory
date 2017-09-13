@@ -28,6 +28,8 @@ import com.example.jammy.pbfoodstory.moment.MomentActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import cn.bmob.v3.Bmob;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bmob.initialize(this, "eb5a71e7351e1b8f231ba4d6d3484cf7");
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
