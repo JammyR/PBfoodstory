@@ -25,6 +25,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.example.jammy.pbfoodstory.R;
 import com.example.jammy.pbfoodstory.moment.MomentActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
 public class MainActivity extends AppCompatActivity
@@ -36,20 +38,21 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab = null;
     float downX;
     float downY;
+    public static Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MomentActivity.class);
-                startActivity(intent);
+                Intent mIntent = new Intent(MainActivity.this,MomentActivity.class);
+                startActivity(mIntent);
             }
         });
 
@@ -161,6 +164,8 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onMyLocationChange(Location location) {
                     //// TODO: 2017/9/5   得到经纬度后的回调
+//                    MainActivity.this.location = location;
+                    MainActivity.this.location = location;
                 }
             });
 

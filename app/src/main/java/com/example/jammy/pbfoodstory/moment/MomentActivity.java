@@ -11,10 +11,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.jammy.pbfoodstory.R;
 import com.example.jammy.pbfoodstory.adapter.MomentAdapter;
+import com.example.jammy.pbfoodstory.address.AddressActivity;
+import com.example.jammy.pbfoodstory.main.MainActivity;
 import com.example.jammy.pbfoodstory.photo.PhotoActivity;
 import com.example.jammy.pbfoodstory.utils.SpaceItemDecoration;
 import com.zhihu.matisse.Matisse;
@@ -28,10 +31,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MomentActivity extends AppCompatActivity{
+public class MomentActivity extends AppCompatActivity {
 
-    PoiSearch poiSearch;
 
+    public static final int REQUEST_CODE_ADDRESS_SUCCESS = 1000;
     @BindView(R.id.et_moment)
     EditText etMoment;
     @BindView(R.id.rv)
@@ -41,16 +44,14 @@ public class MomentActivity extends AppCompatActivity{
     public static int REQUEST_CODE_CHOOSE = 1;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-
-    Location location ;
-
+    public static int REQUEST_CODE_ADDRESS = 2;
+    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monent);
         ButterKnife.bind(this);
-
         picList = new ArrayList();
         adapter = new MomentAdapter(R.layout.item_moment, picList);
         //// TODO: 2017/9/6 初始化加号要改，想辦法把mipmap的文件添加進去到第一個
@@ -69,8 +70,7 @@ public class MomentActivity extends AppCompatActivity{
                             .maxSelectable(9)
                             .imageEngine(new GlideEngine())
                             .forResult(REQUEST_CODE_CHOOSE);// 设置作为标记的请求码
-                }
-                else{
+                } else {
                     //todo:打开已选图片浏览
                     Intent intent = new Intent(MomentActivity.this, PhotoActivity.class);
                     intent.putStringArrayListExtra("list", (ArrayList<String>) picList);
@@ -88,13 +88,29 @@ public class MomentActivity extends AppCompatActivity{
             for (Uri uri : Matisse.obtainResult(data))
                 picList.add(uri.toString());
             adapter.setNewData(picList);
+        }else if(requestCode == REQUEST_CODE_ADDRESS && resultCode == REQUEST_CODE_ADDRESS_SUCCESS){
+            PoiItem poiItem = data.getParcelableExtra("result");
+            tvAddress.setText(poiItem.getTitle());
         }
     }
 
-    @OnClick(R.id.tv_address)
-    public void onViewClicked() {
-        /**
-         * todo:點擊進行地址選擇
-         */
+    @OnClick({R.id.tv_address, R.id.iv})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_address:
+                /**
+                 * todo:跳轉至AddressActivity進行具體地址選擇
+                 */
+
+                startActivityForResult(new Intent(MomentActivity.this, AddressActivity.class),REQUEST_CODE_ADDRESS);
+
+
+
+                break;
+            case R.id.iv:
+                //todo:佈局優化
+                tvAddress.setText(String.valueOf(MainActivity.location.getExtras().get("Address")));
+                break;
+        }
     }
 }

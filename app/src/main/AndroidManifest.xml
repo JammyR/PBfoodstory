@@ -62,9 +62,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".moment.MomentActivity" />
-        <activity android:name=".photo.PhotoActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+        <activity
+            android:name=".photo.PhotoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".address.AddressActivity"></activity>
     </application>
 
 </manifest>

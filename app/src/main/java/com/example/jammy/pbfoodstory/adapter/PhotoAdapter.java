@@ -3,7 +3,6 @@ package com.example.jammy.pbfoodstory.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by Jammy on 2017/9/8.
