@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.design.widget.FloatingActionButton;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
@@ -22,13 +24,25 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.example.jammy.pbfoodstory.R;
+import com.example.jammy.pbfoodstory.bean.Moment;
+import com.example.jammy.pbfoodstory.detail.DetailActivity;
 import com.example.jammy.pbfoodstory.moment.MomentActivity;
+import com.google.common.collect.MapMaker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.List;
+
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
+import rx.Observer;
+import rx.android.MainThreadSubscription;
+import rx.functions.Action1;
 
 
 public class MainActivity extends AppCompatActivity
@@ -56,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(MainActivity.this,MomentActivity.class);
+                Intent mIntent = new Intent(MainActivity.this, MomentActivity.class);
                 startActivity(mIntent);
             }
         });
@@ -76,6 +90,47 @@ public class MainActivity extends AppCompatActivity
         initAmap();
         initUiSetting();
         initMyLocation();
+        initMaker();
+    }
+
+    private void initMaker() {
+
+        BmobQuery<Moment> query = new BmobQuery<>();
+        query.findObjectsObservable(Moment.class).subscribe(new Observer<List<Moment>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onNext(final List<Moment> moments) {
+                for (Moment moment : moments) {
+                    MarkerOptions options = new MarkerOptions();
+                    options.position(new LatLng(moment.getPoiItem().getLatLonPoint().getLatitude(), moment.getPoiItem().getLatLonPoint().getLongitude()));
+                    Marker marker = aMap.addMarker(options);
+                    ///marker的setobject将Object放进去
+                    marker.setObject(moment);
+                }
+                aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        ////todo:这里设置Marker的点击事件   将Object传入详情Activity
+                        Toast.makeText(MainActivity.this, "1111", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                        Gson gson = new Gson();
+                        String json = gson.toJson(marker.getObject());
+                        intent.putExtra("marker", json);
+                        startActivity(intent);
+                        return false;
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -162,7 +217,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * 初始化aMap
      */
-    public void initAmap(){
+    public void initAmap() {
         if (aMap == null) {
             aMap = mapView.getMap();
             aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener() {
@@ -184,13 +239,13 @@ public class MainActivity extends AppCompatActivity
             aMap.setOnMapTouchListener(new AMap.OnMapTouchListener() {
                 @Override
                 public void onTouch(MotionEvent motionEvent) {
-                    switch (motionEvent.getAction()){
+                    switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             downX = motionEvent.getX();
                             downY = motionEvent.getY();
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if(Math.abs(downX-motionEvent.getX())>300||Math.abs(downY-motionEvent.getY())>300){
+                            if (Math.abs(downX - motionEvent.getX()) > 300 || Math.abs(downY - motionEvent.getY()) > 300) {
                                 fab.setVisibility(View.GONE);
                             }
                             break;
@@ -204,11 +259,11 @@ public class MainActivity extends AppCompatActivity
      * 初始化地点
      * TODO:定位模式還有問題
      */
-    public void initMyLocation(){
+    public void initMyLocation() {
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE) ;
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
         myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
